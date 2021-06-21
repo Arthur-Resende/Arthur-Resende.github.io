@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import '../src/index.css'
 
 class Tiles extends React.Component {
   constructor(props) {
@@ -70,24 +71,20 @@ class Tiles extends React.Component {
     });
   }
 
-  // changeTiles(r, c) {
-  //   let tilesCopy = this.state.tiles
-  //   let temp = tilesCopy[r][c];
-
-  //   tilesCopy[r][c] = tilesCopy[r][c + 1];
-  //   tilesCopy[r][c + 1] = temp;
-  //   temp = null;
-
-  //   this.setState({
-  //     tiles: tilesCopy,
-  //   });
-  // }
-
   render() {
     return(
-      <div className="tiles">
-        <h1>{this.state.tiles[0]}</h1>
-        <h1>{this.state.tiles[1]}</h1>
+      <div className="board">
+        {this.state.tiles.map(row => (
+          row.map(tile => (
+            <button
+              className="tile"
+              id={'number' + tile}
+              onClick={() => alert('click')}
+            >
+              {tile}
+            </button>
+          ))
+        ))}
         <button onClick={() => this.moveLeft()}>{`<`}</button>
         <button onClick={() => this.moveUp()}>^</button>
         <button onClick={() => this.moveDown()}>v</button>
