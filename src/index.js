@@ -71,6 +71,23 @@ class Tiles extends React.Component {
     });
   }
 
+  findDirection(tile) {
+    const tiles = this.state.tiles
+    const x = this.state.indexZero[0]
+    const y = this.state.indexZero[1]
+
+    if(tile === tiles[x][y-1])
+      this.moveRight()
+    else if(tile === tiles[x][y+1])
+      this.moveLeft()
+    else if(x===1 && tile===tiles[x-1][y])
+      this.moveDown()
+    else if(x===0 && tile===tiles[x+1][y])
+      this.moveUp()
+    else
+      alert('nowere near zero')
+  }
+
   render() {
     return(
       <div className="board">
@@ -79,16 +96,16 @@ class Tiles extends React.Component {
             <button
               className="tile"
               id={'number' + tile}
-              onClick={() => alert('click')}
+              onClick={() => this.findDirection(tile)}
             >
               {tile}
             </button>
           ))
         ))}
-        <button onClick={() => this.moveLeft()}>{`<`}</button>
+        {/* <button onClick={() => this.moveLeft()}>{`<`}</button>
         <button onClick={() => this.moveUp()}>^</button>
         <button onClick={() => this.moveDown()}>v</button>
-        <button onClick={() => this.moveRight()}>{'>'}</button>
+        <button onClick={() => this.moveRight()}>{'>'}</button> */}
       </div>
     );
   }
