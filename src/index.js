@@ -6,9 +6,25 @@ class Tiles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tiles: [[0, 1, 2], [3, 4, 5]],
-      indexZero: [0, 0],
+      tiles: [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]],
+      indexZero: [3, 3],
+      winner: false,
     }
+  }
+
+  didItWin() {
+    const tiles = this.state.tiles;
+    const winningOrder = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]];
+
+    for(let i=0; i<4; i++) {
+      for(let j=0; j<4; j++) {
+        if(tiles[i][j] !== winningOrder[i][j]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   moveLeft() {
@@ -16,7 +32,7 @@ class Tiles extends React.Component {
     const i = this.state.indexZero[0];
     const j = this.state.indexZero[1];
     
-    if(j===2) return;
+    if(j===3) return;
 
     tiles[i][j] = tiles[i][j+1];
     tiles[i][j+1] = 0;
@@ -46,7 +62,7 @@ class Tiles extends React.Component {
     const i = this.state.indexZero[0];
     const j = this.state.indexZero[1];
 
-    if(i===1) return;
+    if(i===3) return;
 
     tiles[i][j] = tiles[i+1][j];
     tiles[i+1][j] = 0;
@@ -80,12 +96,16 @@ class Tiles extends React.Component {
       this.moveRight()
     else if(tile === tiles[x][y+1])
       this.moveLeft()
-    else if(x===1 && tile===tiles[x-1][y])
+    else if(x >= 1 && tile===tiles[x-1][y])
       this.moveDown()
-    else if(x===0 && tile===tiles[x+1][y])
+    else if(x <= 3 && tile===tiles[x+1][y])
       this.moveUp()
     else
       alert('nowere near zero')
+
+    if(this.didItWin() === true) {
+      alert('voce ganhou')
+    }
   }
 
   render() {
@@ -102,10 +122,10 @@ class Tiles extends React.Component {
             </button>
           ))
         ))}
-        {/* <button onClick={() => this.moveLeft()}>{`<`}</button>
-        <button onClick={() => this.moveUp()}>^</button>
-        <button onClick={() => this.moveDown()}>v</button>
-        <button onClick={() => this.moveRight()}>{'>'}</button> */}
+        <div>
+          {this.state.indexZero[0]},
+          {this.state.indexZero[1]}
+        </div>
       </div>
     );
   }
