@@ -1,14 +1,40 @@
+* {
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #333333;
+}
+
 .tile {
-    height: 50px;
-    width: 50px;
-    border: solid 1px black;
+    height: 100px;
+    width: 100px;
+    background-color: #abc9d6;
+    border: solid 1px white;
     display: inline-block;
 }
 
 #number0 {
-    background-color: black;
+    background-color: #556369;
+    color: white;
 }
 
 .board {
-    max-width: 200px;
+    border: solid 3px white;
+    max-width: 400px;
+}
+
+.game {
+    color: white;
+    text-align: center;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    font-weight: lighter;
+    border-bottom: solid 1px white;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
 }

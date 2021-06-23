@@ -106,13 +106,23 @@ class Board extends React.Component {
     return (
       <div className="board">
         <Tiles size={this.state.sizeOfGame}></Tiles>
-        {this.state.sizeOfGame}
+      </div>
+    )
+  }
+}
+
+class Game extends React.Component {
+  render () {
+    return (
+      <div className="game">
+        <h1>Sliding Puzzle Game!</h1>
+        <Board></Board>
       </div>
     )
   }
 }
 
 ReactDOM.render(
-  <Board></Board>,
+  <Game></Game>,
   document.getElementById('root')
 )
