@@ -6,132 +6,130 @@ class Tiles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tiles: [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]],
-      indexZero: [3, 3],
+      size: this.props.size,
+      tiles: Array.from(
+        {length: (this.props.size**2)}, (v, k) => {
+          if(k!==this.props.size**2-1){return k + 1} else {return 0}
+        }),
+      indexZero: this.props.size**2-1,
       winner: false,
     }
   }
 
   didItWin() {
     const tiles = this.state.tiles;
-    const winningOrder = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]];
+    const winningOrder = Array.from(
+      {length: (this.props.size**2)}, (v, k) => {
+        if(k!==this.props.size**2-1){return k + 1} else {return 0}
+      });
 
-    for(let i=0; i<4; i++) {
-      for(let j=0; j<4; j++) {
-        if(tiles[i][j] !== winningOrder[i][j]) {
-          return false;
-        }
+    for(let i=0; i<tiles.length; i++) {
+      if(tiles[i] !== winningOrder[i]) {
+        return false;
       }
     }
 
-    return true;
+    alert('you won');
   }
 
-  moveLeft() {
+  move(position) {
     let tiles = this.state.tiles;
-    const i = this.state.indexZero[0];
-    const j = this.state.indexZero[1];
-    
-    if(j===3) return;
+    const indexZero = this.state.indexZero;
 
-    tiles[i][j] = tiles[i][j+1];
-    tiles[i][j+1] = 0;
-    this.setState({
-      tiles: tiles,
-      indexZero: [i, j+1],
-    });
-  }
+    switch(position) {
+      case 'r':
+        tiles[indexZero] = tiles[indexZero + 1];
+        tiles[indexZero + 1] = 0;
+        this.setState({
+          tiles: tiles,
+          indexZero: indexZero + 1,
+        });
+        break;
+      
+      case 'l':
+        tiles[indexZero] = tiles[indexZero - 1];
+        tiles[indexZero - 1] = 0;
+        this.setState({
+          tiles: tiles,
+          indexZero: indexZero - 1,
+        });
+        break;
 
-  moveRight() {
-    let tiles = this.state.tiles;
-    const i = this.state.indexZero[0];
-    const j = this.state.indexZero[1];
+      case 'u':
+        tiles[indexZero] = tiles[indexZero - this.state.size];
+        tiles[indexZero - this.state.size] = 0;
+        this.setState({
+          tiles: tiles,
+          indexZero: indexZero - this.state.size,
+        });
+        break;
 
-    if(j===0) return;
-
-    tiles[i][j] = tiles[i][j-1];
-    tiles[i][j-1] = 0;
-    this.setState({
-      tiles: tiles,
-      indexZero: [i, j-1],
-    });
-  }
-
-  moveUp() {
-    let tiles = this.state.tiles;
-    const i = this.state.indexZero[0];
-    const j = this.state.indexZero[1];
-
-    if(i===3) return;
-
-    tiles[i][j] = tiles[i+1][j];
-    tiles[i+1][j] = 0;
-    this.setState({
-      tiles: tiles,
-      indexZero: [i+1, j],
-    });
-  }
-
-  moveDown() {
-    let tiles = this.state.tiles;
-    const i = this.state.indexZero[0];
-    const j = this.state.indexZero[1];
-
-    if(i===0) return;
-
-    tiles[i][j] = tiles[i-1][j];
-    tiles[i-1][j] = 0;
-    this.setState({
-      tiles: tiles,
-      indexZero: [i-1, j],
-    });
+      case 'd':
+        tiles[indexZero] = tiles[indexZero + this.state.size];
+        tiles[indexZero + this.state.size] = 0;
+        this.setState({
+          tiles: tiles,
+          indexZero: indexZero + this.state.size,
+        });
+        break;
+      
+      default:
+        break;
+    }
   }
 
   findDirection(tile) {
     const tiles = this.state.tiles
-    const x = this.state.indexZero[0]
-    const y = this.state.indexZero[1]
+    const indexZero = this.state.indexZero
 
-    if(tile === tiles[x][y-1])
-      this.moveRight()
-    else if(tile === tiles[x][y+1])
-      this.moveLeft()
-    else if(x >= 1 && tile===tiles[x-1][y])
-      this.moveDown()
-    else if(x <= 3 && tile===tiles[x+1][y])
-      this.moveUp()
+    if(tile === tiles[indexZero - 1])
+      this.move('l')
+    else if(tile === tiles[indexZero + 1])
+      this.move('r')
+    else if(tile===tiles[indexZero - this.state.size])
+      this.move('u')
+    else if(tile===tiles[indexZero + this.state.size])
+      this.move('d')
     else
-      alert('nowere near zero')
-
-    if(this.didItWin() === true) {
-      alert('voce ganhou')
-    }
+      return
   }
 
   render() {
     return(
-      <div className="board">
-        {this.state.tiles.map(row => (
-          row.map(tile => (
-            <button
-              className="tile"
-              id={'number' + tile}
-              onClick={() => this.findDirection(tile)}
-            >
-              {tile}
-            </button>
-          ))
+      <div>
+        {this.state.tiles.map((tile) => (
+          <button
+            className="tile"
+            id={'number' + tile}
+            onClick={() => {this.findDirection(tile); this.didItWin()}}
+          >
+            {tile}
+          </button>
         ))}
-        <div>
-          {this.state.indexZero[0]},
-          {this.state.indexZero[1]}
-        </div>
+      </div>
+    );
+  }
+}
+
+class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sizeOfGame: 4,
+    }
+  }
+
+  render() {
+    return (
+      <div className="board">
+        <Tiles size={this.state.sizeOfGame}></Tiles>
+        {this.state.sizeOfGame}
       </div>
     );
   }
 }
 
 ReactDOM.render(
-  <Tiles></Tiles>,
+  <Board></Board>,
   document.getElementById('root')
 );
