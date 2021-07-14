@@ -20,7 +20,7 @@ Algum instalador de pacotes (yarn ou npm)
 
 ```bash
 # Clone este repositório
-$ git clone <https://github.com/Arthur-Resende/sliding-puzzle-react>
+$ git clone https://github.com/Arthur-Resende/sliding-puzzle-react
 
 # Acesse a pasta do projeto no terminal/cmd
 $ cd promobit
